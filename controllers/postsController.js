@@ -47,7 +47,7 @@ module.exports = {
                         }
                         console.log(results);
                         
-                        res.send(results);
+                        return res.status(200).send(results);
                     })   
                 })    
             })

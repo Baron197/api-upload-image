@@ -35,7 +35,7 @@ module.exports = {
         };
 
         return multer({
-            storage: storage,
+            storage,
             fileFilter: imageFilter
         });
     }
