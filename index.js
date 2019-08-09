@@ -9,6 +9,7 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(express.static('public'))
 
 app.get('/', (req,res) => {
     res.status(200).send('<h1>API Aktif!</h1>')
