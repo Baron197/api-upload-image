@@ -1,9 +1,10 @@
 const conn = require('../database')
 const { uploader } = require('../helpers/uploader')
+const fs = require('fs')
 
 module.exports = {
     getPosts: (req,res) => {
-        var sql = `Select * from tari;`;
+        var sql = `Select * from posts;`;
         conn.query(sql, (err,result) => {
             if(err) return res.status(500).send({ message: 'Error!', error: err})
 
@@ -54,5 +55,33 @@ module.exports = {
         } catch(err) {
             return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
         }
+    },
+    deletePost: (req,res) => {
+        var postId = req.params.id;
+        var sql = `SELECT * from posts where id = ${postId};`;
+        conn.query(sql, (err, results) => {
+            if(err) {
+                return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+            }
+            
+            if(results.length > 0) {
+                sql = `DELETE from posts where id = ${postId};`
+                conn.query(sql, (err1,results1) => {
+                    if(err1) {
+                        return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
+                    }
+    
+                    fs.unlinkSync('./public' + results[0].image);
+                    sql = `SELECT * from posts;`;
+                    conn.query(sql, (err2,results2) => {
+                        if(err2) {
+                            return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err2.message });
+                        }
+    
+                        res.status(200).send(results2);
+                    })
+                })
+            }
+        })  
     }
 }
