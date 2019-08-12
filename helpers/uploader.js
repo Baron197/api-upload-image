@@ -14,7 +14,7 @@ module.exports = {
                     console.log(dir, "exists")
                     cb(null, dir);
                 } else {
-                    fs.mkdir(dir, err => cb(err, dir));
+                    fs.mkdir(dir, { recursive: true }, err => cb(err, dir));
                     console.log(dir, "make")
                 }
             },
