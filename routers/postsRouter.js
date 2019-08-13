@@ -6,5 +6,6 @@ const router = express.Router()
 router.get('/getposts', postsController.getPosts)
 router.post('/addpost', postsController.addPost)
 router.delete('/deletepost/:id', postsController.deletePost)
+router.put('/editpost/:id', postsController.editPost)
 
 module.exports = router
