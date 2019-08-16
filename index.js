@@ -28,6 +28,4 @@ const { postsRouter, usersRouter } = require('./routers')
 app.use('/post', postsRouter)
 app.use('/user', usersRouter)
 
-console.log('test')
-
 app.listen(port, () => console.log(`API aktif di port ${port}`))
