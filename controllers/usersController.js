@@ -51,5 +51,23 @@ module.exports = {
                 })
             }
         })
+    },
+    emailVerifikasi: (req,res) => {
+        var { username, password } = req.body;
+        var sql = `Select username,email from users where username='${username}'`;
+        conn.query(sql, (err,results) => {
+            if(err) return res.status(500).send({ status: 'error', err })
+
+            if(results.length === 0) {
+                return res.status(500).send({ status: 'error', err: 'User Not Found!'})
+            }
+
+            sql = `Update users set status='Verified' where username='${username}' and password='${password}'`
+            conn.query(sql, (err,results1) => {
+                if(err) return res.status(500).send({ status: 'error', err })
+
+                res.status(200).send({ username: results[0].username, email: results[0].email, status: 'Verified' })
+            })
+        })
     }
 }
