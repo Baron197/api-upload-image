@@ -18,6 +18,13 @@ app.get('/', (req,res) => {
     res.status(200).send('<h1>API Aktif!</h1>')
 })
 
+app.get('/crash', (req,res) => {
+    // console.loog('blabla')
+    process.exit();
+    
+    return res.send("Success")
+})
+
 app.get('/testencrypt', (req,res) => {
     var hashPassword = Crypto.createHmac("sha256", "kucingbertasbih")
                             .update(req.query.password).digest("hex");

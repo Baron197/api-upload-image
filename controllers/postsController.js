@@ -4,7 +4,7 @@ const fs = require('fs')
 
 module.exports = {
     getPosts: (req,res) => {
-        var sql = `Select * from posts;`;
+        var sql = `Select * from posts where userId = ${req.user.userId};`;
         conn.query(sql, (err,result) => {
             if(err) return res.status(500).send({ message: 'Error!', error: err})
 
@@ -30,6 +30,7 @@ module.exports = {
                 const data = JSON.parse(req.body.data);
                 console.log(data)
                 data.image = imagePath;
+                data.userId = req.user.userId;
                 
                 var sql = 'INSERT INTO posts SET ?';
                 conn.query(sql, data, (err, results) => {
@@ -40,7 +41,7 @@ module.exports = {
                     }
                    
                     console.log(results);
-                    sql = 'SELECT * from posts;';
+                    sql = `SELECT * from posts where userId = ${req.user.userId};`;
                     conn.query(sql, (err, results) => {
                         if(err) {
                             console.log(err.message);
@@ -72,7 +73,7 @@ module.exports = {
                     }
     
                     fs.unlinkSync('./public' + results[0].image);
-                    sql = `SELECT * from posts;`;
+                    sql = `SELECT * from posts where userId=${req.user.userId};`;
                     conn.query(sql, (err2,results2) => {
                         if(err2) {
                             return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err2.message });
@@ -120,7 +121,7 @@ module.exports = {
                             if(imagePath) {
                                 fs.unlinkSync('./public' + results[0].image);
                             }
-                            sql = `Select * from posts;`;
+                            sql = `Select * from posts where userId=${req.user.userId};`;
                             conn.query(sql, (err2,results2) => {
                                 if(err2) {
                                     return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
