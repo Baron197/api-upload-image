@@ -2,12 +2,14 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const Crypto = require("crypto");
+const bearerToken = require('express-bearer-token');
 
 const port = 1997
 
 const app = express()
 
 app.use(cors())
+app.use(bearerToken())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static('public'))

@@ -1,6 +1,7 @@
 const conn = require('../database')
 const Crypto = require('crypto')
 const transporter = require('../helpers/mailer')
+const { createJWTToken } = require('../helpers/jwt')
 
 module.exports = {
     register: (req,res) => {
@@ -102,8 +103,8 @@ module.exports = {
         })
     },
     keepLogin: (req,res) => {
-        var { username } = req.body;
-        var sql = `Select * from users where username='${username}'`
+        console.log(req.user)
+        var sql = `Select * from users where id=${req.user.userId}`
         conn.query(sql,(err,results) => {
             if(err) return res.status(500).send({ status: 'error', err })
 
@@ -125,8 +126,9 @@ module.exports = {
             if(results.length === 0) {
                 return res.status(200).send({ status: 'error', message: 'Username or Password Incorrect!'})
             }
-
-            return res.status(200).send({ username, email: results[0].email, status: results[0].status})
+            const token = createJWTToken({ userId: results[0].id, username: results[0].username })
+            console.log(token)
+            return res.status(200).send({ username, email: results[0].email, status: results[0].status, token})
         })
     }
 }
